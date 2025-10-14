@@ -1,0 +1,560 @@
+/* Animación del borde iridiscente: propiedad personalizada para el ángulo */
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background: #0b132b;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+  padding-top: calc(env(safe-area-inset-top) + 64px);
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+
+  /* Variables del parallax */
+  --px: 0;
+  --py: 0;
+}
+
+/* Póster centrado con parallax siempre activo */
+:host::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url('/assets/poppy-bg.png') center 40px / contain no-repeat;
+  opacity: 0.95;
+  pointer-events: none;
+  z-index: 0;
+
+  /* Parallax activo */
+  will-change: transform;
+  transition: transform 80ms linear;
+  transform: translate3d(calc(var(--px) * 28px), calc(var(--py) * 20px), 0) scale(1.08);
+}
+
+/* Viñeta + degradado */
+:host::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%),
+    linear-gradient(180deg, rgba(11,19,43,0) 0%, rgba(28,37,65,1) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Tarjeta principal encima de todo */
+
+/* ==== Contenedor de botones (base) ==== */
+.inv-cta {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: nowrap;
+}
+.inv-cta a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+  padding: 0.85rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.inv-card {
+  position: relative;
+  z-index: 2;
+  width: clamp(320px, 92vw, 680px);
+  margin: 0 auto 2rem;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)) padding-box,
+    conic-gradient(from var(--border-angle) at 50% 50%, #60a5fa, #06b6d4, #22c55e, #38bdf8, #60a5fa) border-box;
+  border-radius: 16px;
+  padding: 2rem;
+  box-sizing: border-box;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  transition: box-shadow .25s ease, transform .2s ease;
+  animation: fadeInCard 900ms ease-out both, spinBorder 9s linear infinite;
+}
+
+.inv-card:hover {
+  box-shadow: 0 0 28px rgba(255,255,255,0.08), 0 0 60px rgba(185,140,255,0.18);
+}
+
+.inv-hero h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #f9d71c;
+}
+
+.inv-name { color: #60a5fa; }
+
+.inv-age {
+  font-size: 1.5rem;
+  color: #70a1ff;
+  margin-bottom: 1.5rem;
+}
+
+.inv-details { text-align: left; margin: 1rem auto 2rem; }
+
+.inv-details h2 { text-align: center; color: #ffa502; margin-bottom: 1rem; }
+
+.inv-list { list-style: none; padding: 0; line-height: 1.8; }
+
+.inv-list strong { color: #f9d71c; }
+
+.inv-btn {
+  display: inline-block;
+  background: #3b82f6;
+  color: white;
+  padding: 0.8rem 1.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 rgba(59,130,246,0.0);
+  animation: btnPulse 2.4s ease-in-out infinite;
+}
+.inv-btn:hover { background: #2563eb; transform: scale(1.05); }
+
+.inv-footer { margin-top: 2rem; font-size: 0.9rem; color: #ccc; }
+
+/* Ajuste fino en móviles */
+@media (max-width: 480px) {
+  :host::before { background-position: center 100px; background-size: contain; }
+  .inv-card { padding: 1.2rem; }
+  .inv-hero h1 { font-size: 1.5rem; }
+}
+
+/* Centrado vertical en pantallas altas */
+@media (min-height: 780px) {
+  :host {
+    justify-content: center;
+    padding-top: calc(env(safe-area-inset-top) + 24px);
+  }
+}
+
+/* Ajustes móviles extra */
+@media (max-width: 480px) {
+  :host {
+    padding-top: calc(env(safe-area-inset-top) + 108px);
+  }
+  .inv-card {
+    width: 100%;
+    padding: 1.25rem 1rem 1.35rem;
+    border-radius: 14px;
+    margin-top: 0.5rem;
+  }
+  .inv-hero h1 { font-size: 1.35rem; }
+  .inv-details { font-size: 0.95rem; }
+  .countdown { font-size: 1.3rem; }
+  .inv-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  .inv-cta a {
+    width: 100%;
+    max-width: 100%;
+    min-height: 52px;
+    font-size: 1.02rem;
+    box-sizing: border-box;
+  }
+  .banner-love {
+    font-size: 0.95rem;
+    padding: 0.5rem auto;
+  }
+}
+
+
+/* Solo aplica el movimiento cuando el usuario NO pide reducir animaciones */
+@media (prefers-reduced-motion: no-preference) {
+  :host::before {
+    transition: transform 80ms linear;
+    transform: translate3d(calc(var(--px) * 14px), calc(var(--py) * 10px), 0) scale(1.04);
+  }
+}
+
+
+/* ==== Animación de entrada de la tarjeta ==== */
+@keyframes fadeInCard {
+  from { opacity: 0; transform: translateY(16px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes spinBorder {
+  to { --border-angle: 360deg; }
+}
+
+/* ==== Botón con brillo barrido y pulso suave ==== */
+.inv-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: -120%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.65) 50%, transparent 100%);
+  transition: left .6s ease;
+}
+.inv-btn:hover::after { left: 120%; }
+@keyframes btnPulse {
+  0%,100% { box-shadow: 0 0 0 rgba(255,107,129,0.0); }
+  50%     { box-shadow: 0 0 24px rgba(59,130,246,0.35); }
+}
+
+/* ==== Partículas flotantes (globitos de luz) ==== */
+/* Contenedor virtual sobre todo menos la tarjeta */
+:host .particle {
+  position: fixed;
+  bottom: -40px;
+  width: var(--size, 10px);
+  height: var(--size, 10px);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,.25) 40%, transparent 70%),
+    radial-gradient(circle at 70% 70%, hsla(var(--hue, 330), 90%, 60%, .9), hsla(var(--hue, 330), 90%, 50%, .4) 60%, transparent 80%);
+  filter: blur(.2px);
+  z-index: 0; /* debajo de .inv-card (que tiene z-index:2) */
+  opacity: .8;
+  left: var(--x, 50%);
+  animation: floaty var(--dur, 9s) linear var(--delay, 0s) infinite;
+  will-change: transform, opacity;
+   pointer-events: none;
+}
+
+@keyframes floaty {
+  0%   { transform: translateY(0) scale(1);     opacity: .9; }
+  80%  { opacity: .6; }
+  100% { transform: translateY(-110vh) scale(1.6); opacity: 0; }
+}
+
+/* Opcional: pequeñas variaciones al pasar el mouse (parallax ya existente) */
+:host:hover .particle {
+  filter: drop-shadow(0 0 6px rgba(255,255,255,.25));
+}
+
+/* ==== Banner superior con mensaje especial ==== */
+.banner-love {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.6rem auto;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f9d71c;
+  font-weight: 600;
+  letter-spacing: 1px;
+  backdrop-filter: blur(8px);
+  z-index: 3;
+  font-size: 1.1rem;
+  animation: bannerSlide 1.4s ease-out both;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+@keyframes bannerSlide {
+  from {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==== Footer con dedicatoria tierna ==== */
+.inv-footer {
+  margin-top: 2.5rem;
+  font-size: 1rem;
+  color: #ffd6e0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  line-height: 1.6;
+  animation: fadeInFooter 1.4s ease-in-out both;
+}
+
+@keyframes fadeInFooter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Botón WhatsApp */
+.inv-wa {
+  display: inline-block;
+  margin-left: .8rem;
+  background: #25D366;
+  color: #0b132b;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: .2px;
+  box-shadow: 0 6px 16px rgba(37,211,102,.25);
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+}
+.inv-wa:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(37,211,102,.35);
+  filter: saturate(1.1);
+}
+
+/* Stack vertical en pantallas angostas */
+@media (max-width: 480px) {
+  .inv-cta a { display: block; margin: .6rem 0 0; }
+  .inv-cta .inv-wa { margin-left: 0; }
+}
+
+/* ==== Contador regresivo ==== */
+.countdown-container {
+  margin-top: 2rem;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  animation: fadeInCountdown 1.4s ease-in-out both;
+}
+
+.countdown-container p {
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+  color: #f9d71c;
+}
+
+.countdown {
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  color: #dbeafe;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.3);
+}
+
+@keyframes fadeInCountdown {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==== Cambio de color cuando faltan menos de 24h ==== */
+.countdown.urgent {
+  color: #ffe066;
+  border-color: rgba(255, 224, 102, 0.8);
+  box-shadow: 0 0 16px rgba(255, 224, 102, 0.6);
+  animation: blinkGlow 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes blinkGlow {
+  0% {
+    text-shadow: 0 0 6px rgba(255, 224, 102, 0.6),
+                 0 0 12px rgba(255, 224, 102, 0.3);
+    transform: scale(1);
+  }
+  100% {
+    text-shadow: 0 0 14px rgba(255, 224, 102, 1),
+                 0 0 24px rgba(255, 224, 102, 0.8);
+    transform: scale(1.03);
+  }
+}
+
+/* ==== Botón flotante de audio ==== */
+.audio-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 4; /* por encima del banner (3) y la tarjeta */
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.12);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease, border-color .2s ease;
+}
+
+.audio-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+}
+
+.audio-toggle:active { transform: translateY(0); }
+
+.audio-toggle:focus-visible {
+  outline: 3px solid rgba(255, 224, 102, .9); /* anillo dorado */
+  outline-offset: 3px;
+}
+
+/* Estado silenciado: aria-pressed="true" (lo marca el TS) */
+.audio-toggle[aria-pressed="true"] {
+  background: rgba(255, 107, 129, 0.18);
+  border-color: rgba(255, 107, 129, 0.55);
+  color: #ffeef2;
+  box-shadow: 0 8px 24px rgba(255, 107, 129, 0.25), 0 0 0 1px rgba(255, 107, 129, 0.25) inset;
+}
+
+/* Tocabilidad en móvil: un poco más grande */
+@media (max-width: 480px) {
+  .audio-toggle {
+    right: 12px;
+    bottom: 12px;
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+}
+
+/* Si el usuario prefiere menos movimiento, evita saltos */
+@media (prefers-reduced-motion: reduce) {
+  .audio-toggle { transition: none; }
+  .inv-card { animation: fadeInCard 900ms ease-out both; }
+}
+
+
+/* ----- “Detalles” mejorado ----- */
+.inv-details {
+  position: relative;
+}
+
+.inv-details h2 {
+  position: relative;
+  display: inline-block;
+  padding: 0 .4rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+}
+
+/* subrayado glow bajo “Detalles” */
+.inv-details h2::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -6px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #ffd166, #f9d71c, transparent);
+  filter: drop-shadow(0 0 6px #f9d71c);
+}
+
+/* lista con iconos y mejor alineación */
+.inv-item {
+  display: grid;
+  grid-template-columns: 26px auto;
+  column-gap: .6rem;
+  row-gap: .25rem;
+  padding: .55rem .75rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  margin-bottom: .5rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,.18) inset;
+}
+
+.inv-ico {
+  align-self: start;
+  font-size: 1.05rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+}
+
+.inv-label {
+  color: #ffd166;
+  font-weight: 700;
+  margin-right: .35rem;
+}
+
+.inv-value {
+  grid-column: 2 / -1; /* ocupa la columna de texto */
+  color: #fff;
+  opacity: .95;
+}
+
+/* respirito extra bajo la lista antes de los botones */
+.inv-cta { margin-top: 1rem; }
+
+/* móvil: compáctalo un poco */
+@media (max-width: 480px) {
+  .inv-item {
+    grid-template-columns: 22px auto;
+    padding: .5rem .6rem;
+  }
+  .inv-ico { font-size: 1rem; }
+}
+
+
+/* ==== Personaje a los costados (solo escritorio) ==== */
+@media (min-width: 1024px) {
+  .inv-card {
+    overflow: visible; /* permite que los laterales se vean fuera de la tarjeta */
+  }
+  .inv-card::before,
+  .inv-card::after {
+    content: "";
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    width: clamp(120px, 14vw, 220px);
+    background: url('/assets/poppy-bg.png') center bottom / contain no-repeat;
+    opacity: 0.28;
+    pointer-events: none;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.45));
+    z-index: 0; /* sobre el fondo, debajo del contenido de la tarjeta */
+    will-change: transform;
+    transition: transform 120ms linear;
+    transform: translate3d(calc(var(--px) * 6px), calc(var(--py) * 4px), 0) scale(1.02);
+  }
+  .inv-card::before {
+    left: calc(-1 * clamp(110px, 12vw, 180px));
+    transform: translate3d(calc(var(--px) * -8px), calc(var(--py) * 5px), 0) scale(1.02) scaleX(-1);
+  }
+  .inv-card::after {
+    right: calc(-1 * clamp(110px, 12vw, 180px));
+    transform: translate3d(calc(var(--px) * 8px), calc(var(--py) * 5px), 0) scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inv-card::before,
+  .inv-card::after { transition: none; transform: none; }
+}
+
+/* Afinado para pantallas muy anchas */
+@media (min-width: 1440px) {
+  .inv-card::before,
+  .inv-card::after {
+    width: clamp(160px, 12vw, 280px);
+    top: 8%;
+    bottom: 8%;
+    opacity: 0.3;
+  }
+  .inv-card::before { left: calc(-1 * clamp(140px, 10vw, 220px)); }
+  .inv-card::after  { right: calc(-1 * clamp(140px, 10vw, 220px)); }
+}
