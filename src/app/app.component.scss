@@ -81,21 +81,19 @@
   z-index: 2;
   width: clamp(320px, 92vw, 680px);
   margin: 0 auto 2rem;
-  border: 1px solid transparent;
-  background:
-    linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)) padding-box,
-    conic-gradient(from var(--border-angle) at 50% 50%, #60a5fa, #06b6d4, #22c55e, #38bdf8, #60a5fa) border-box;
-  border-radius: 16px;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
   padding: 2rem;
   box-sizing: border-box;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  transition: box-shadow .25s ease, transform .2s ease;
-  animation: fadeInCard 900ms ease-out both, spinBorder 9s linear infinite;
+  box-shadow: none;
+  backdrop-filter: none;
+  transition: transform .2s ease;
+  animation: fadeInCard 900ms ease-out both;
 }
 
 .inv-card:hover {
-  box-shadow: 0 0 28px rgba(255,255,255,0.08), 0 0 60px rgba(185,140,255,0.18);
+  box-shadow: none;
 }
 
 .inv-hero h1 {

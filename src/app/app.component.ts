@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
+import { Component, HostListener, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,25 +6,15 @@ import { Component, HostListener, OnDestroy, OnInit, AfterViewInit } from '@angu
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AppComponent implements AfterViewInit {
   // ----- Parallax -----
   private rafId = 0;
   private targetX = 0;
   private targetY = 0;
 
-  // ----- Contador -----
-  countdown = '';
-  private timerId: number | null = null;
-  private eventAt = new Date('2025-10-31T12:00:00');
-
   // ----- Audio / botón flotante -----
   private audioEl: HTMLAudioElement | null = null;
   private toggleBtn: HTMLButtonElement | null = null;
-
-  ngOnInit(): void {
-    this.updateCountdown();
-    this.timerId = window.setInterval(() => this.updateCountdown(), 1000);
-  }
 
   ngAfterViewInit(): void {
     // Referencias de DOM
@@ -61,13 +51,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.timerId !== null) {
-      clearInterval(this.timerId);
-      this.timerId = null;
-    }
-  }
-
   // ---- UI helper para el botón de audio ----
   private updateAudioToggleUI(isPlaying: boolean) {
     if (!this.toggleBtn) return;
@@ -80,33 +63,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (onIcon && offIcon) {
       onIcon.style.display = isPlaying ? '' : 'none';
       offIcon.style.display = isPlaying ? 'none' : '';
-    }
-  }
-
-  // ---- Countdown ----
-  private updateCountdown() {
-    const now = Date.now();
-    const diff = this.eventAt.getTime() - now;
-
-    if (diff <= 0) {
-      this.countdown = '¡Es hoy! 🎉';
-      if (this.timerId !== null) { clearInterval(this.timerId); this.timerId = null; }
-      return;
-    }
-
-    const sec = Math.floor(diff / 1000) % 60;
-    const min = Math.floor(diff / (1000 * 60)) % 60;
-    const hrs = Math.floor(diff / (1000 * 60 * 60)) % 24;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const pad = (n: number) => String(n).padStart(2, '0');
-    this.countdown = `${days}d : ${pad(hrs)}h : ${pad(min)}m : ${pad(sec)}s`;
-
-    // Marca visual si faltan < 24h
-    const oneDay = 1000 * 60 * 60 * 24;
-    const countdownEl = document.querySelector('.countdown');
-    if (countdownEl) {
-      if (diff < oneDay) countdownEl.classList.add('urgent');
-      else countdownEl.classList.remove('urgent');
     }
   }
 
