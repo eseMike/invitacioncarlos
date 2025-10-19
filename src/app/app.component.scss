@@ -154,7 +154,7 @@
 /* Ajustes móviles extra */
 @media (max-width: 480px) {
   :host {
-    padding-top: calc(env(safe-area-inset-top) + 108px);
+    padding-top: calc(env(safe-area-inset-top) + 92px);
   }
   .inv-card {
     width: 100%;
@@ -180,8 +180,9 @@
     box-sizing: border-box;
   }
   .banner-love {
-    font-size: 0.95rem;
-    padding: 0.5rem auto;
+    font-size: 1.3rem;
+    padding: 0.3rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -254,20 +255,20 @@
 /* ==== Banner superior con mensaje especial ==== */
 .banner-love {
   position: fixed;
-  top: 0;
+  top: env(safe-area-inset-top, 0);
   left: 0;
   width: 100%;
-  padding: 0.6rem auto;
+  padding: 0.35rem 0.75rem;
   text-align: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
   color: #f9d71c;
   font-weight: 600;
   letter-spacing: 1px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
   z-index: 3;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   animation: bannerSlide 1.4s ease-out both;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 @keyframes bannerSlide {
